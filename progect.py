@@ -6,7 +6,7 @@ font.init()
 font = font.SysFont('Arial', 40)
 
 
-class GameSprite(sprite.Sprite):
+class GamePlatform(sprite.Sprite):
 
     def __init__(self, sprite1_image, sprite1_x,  sprite1_y, sprite1_vesota, sprite1_dlinna):
         super().__init__()
@@ -31,8 +31,7 @@ FPS = 60
 
 
 steni = []
-x = 50
-y = 35
+
 
 with open('Setka.txt', 'r') as file:
     data = file.readlines()
@@ -41,8 +40,7 @@ with open('Setka.txt', 'r') as file:
         for j in range(len(data[i])):
             if data[i][j] == '1':
                 steni.append(GameSprite(('steni 2.jpg'), j, i, 35, 50))
-    for simvol in data:
-        pass
+
 back_g = transform.scale(image.load("Fon.jpg"), (700, 500))
 
 game = True 
