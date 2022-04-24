@@ -6,7 +6,10 @@ window = display.set_mode((700,500))
 display.set_caption("Platformer")
 backgr = transform.scale(image.load('background.jpg'), (700,500))
 window.blit(backgr,(0,0))
-
+font.init()
+back = (0, 0, 0)
+window.fill(back)
+font1 = font.SysFont('Corbel',35)
 
 class GameSprite(sprite.Sprite):
     def __init__(self, player_image, player_x, player_y, player_speed, width, height):
@@ -48,20 +51,78 @@ class Player(GameSprite):
             self.rect.y -= self.speedY
 
 
+class Button():
+    def __init__(self,x,y,width,height,color,fill_color,text):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.label = font.SysFont('verdana', 35).render(text, True, color)
+        self.image = Surface((width,height),SRCALPHA)
+        # text1 = font1.render(text, True , (0,250,0))
+        self.image.fill(fill_color)
+        self.rect = self.image.get_rect()
+        self.rect.top = y
+        self.rect.left = x
+
+    def color(self,new_color):
+        self.fill_color = new_color
+
+    def collidepoint(self, x, y):
+        return self.rect.collidepoint(x, y)
+
+    def reset(self):
+        # draw.rect(window,self.image,self.rect)
+        window.blit(self.label ,(self.x,self.y))
+        window.blit(self.image , self.rect)
+
+
 spr1 = Player('right_side.png', 0, 100, 3, 70, 80)
+button_1 = Button(380,250,180,50,(250, 0, 0),(0, 250, 0, 0),'Уровень 2')
+button_2 = Button(180,100,350,50,(250, 0 , 0),(0, 250, 0, 0),'Выберите уровень')
+button_3 = Button(130,250,180,50,(250, 0 , 0),(0, 250, 0, 0),'Уровень 1')
+button_4 = Button(250,350,180,50,(250, 0 , 0),(0, 250, 0, 0),'Уровень 3')
 
 game = True
-finish = False
+start = False
 
 while game:
     for e in event.get():
         if e.type == QUIT:
             game = False
 
-    if finish != True:
+    if start == False:
+        button_1.reset()
+        button_2.reset()
+        button_3.reset()
+        button_4.reset()
+
+
+        if e.type == MOUSEBUTTONDOWN:
+                x,y = e.pos
+
+                if button_1.collidepoint(x,y):
+                    start = True
+
+                if button_3.collidepoint(x,y):
+                    start = True
+
+                if button_4.collidepoint(x,y):
+                    start = True
+
+    if start:
         window.blit(backgr,(0,0))
         spr1.reset()
         spr1.update()
         spr1.gravity()
         
     display.update()
+
+
+
+
+
+
+
+
+
