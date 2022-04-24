@@ -14,8 +14,8 @@ class GameSprite(sprite.Sprite):
         self.vesota = sprite1_vesota
         self.dlinna = sprite1_dlinna
         self.rect = self.image.get_rect()
-        self.rect.x = sprite1_x
-        self.rect.y = sprite1_y
+        self.rect.x = sprite1_x*50
+        self.rect.y = sprite1_y*35
         
     def reset(self):
         window.blit(self.image, (self.rect.x, self.rect.y))
@@ -30,40 +30,39 @@ clock = time.Clock()
 FPS = 60
 
 
+steni = []
+x = 50
+y = 35
+
+with open('Setka.txt', 'r') as file:
+    data = file.readlines()
+    print(data)
+    for i in range(len(data)):
+        for j in range(len(data[i])):
+            if data[i][j] == '1':
+                steni.append(GameSprite(('steni 2.jpg'), j, i, 35, 50))
+    for simvol in data:
+        pass
 back_g = transform.scale(image.load("Fon.jpg"), (700, 500))
-stena1 = GameSprite(('steni 2.jpg'), 200, 200, 35, 100)
-stena2 = GameSprite(('steni.jpg'), 350, 200, 35, 100)
-stena3 = GameSprite(('steni.jpg'), 500, 200, 35, 100)
-stena4 = GameSprite(('steni 2.jpg'), 100, 200, 35, 100)
-
-
-
-
-
-
-
-
 
 game = True 
 
 finish = False
 
 while game != False:
+
     for e in event.get():
+
         if e.type == QUIT:
+
             game = False
 
         if finish != True:
 
             window.blit(back_g, (0, 0))
-            stena1.reset()
-            stena2.reset()
-            stena3.reset()
-            stena4.reset()
-
-
-
-
+            for stena in steni:
+                stena.reset()
+           
 
 
     display.update()
