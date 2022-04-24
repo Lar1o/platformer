@@ -10,6 +10,8 @@ font.init()
 back = (0, 0, 0)
 window.fill(back)
 font1 = font.SysFont('Corbel',35)
+clock = time.Clock()
+FPS =60
 
 class GameSprite(sprite.Sprite):
     def __init__(self, player_image, player_x, player_y, player_speed, width, height):
@@ -49,8 +51,7 @@ class Player(GameSprite):
         if keys_pressed[K_SPACE] and self.rect.y > 0 and self.speedY == 0:
             self.speedY = 8
             self.rect.y -= self.speedY
-
-
+   
 class Button():
     def __init__(self,x,y,width,height,color,fill_color,text):
         self.x = x
@@ -77,11 +78,34 @@ class Button():
         window.blit(self.image , self.rect)
 
 
-spr1 = Player('right_side.png', 0, 100, 3, 70, 80)
+class Enemy(GameSprite):
+    def update(self):
+        if self.direction == 'left':
+            self.rect.x -= 4
+        if self.direction != 'left':
+            self.rect.x += 4
+        if self.rect.x <= 400:
+            self.direction = 'right'
+        if self.rect.x >= 600:
+            self.direction = 'left'
+    def update2(self):
+        if self.direction == 'up':
+            self.rect.y -= 4
+        if self.direction != 'up':
+            self.rect.y += 4
+        if self.rect.y >= 435:
+            self.direction = 'up'
+        if self.rect.y <= 5:
+            self.direction = 'down'
+    
+
+spr1 = Player('right_side.png', 0, 100, 200, 70, 80)
 button_1 = Button(380,250,180,50,(250, 0, 0),(0, 250, 0, 0),'Уровень 2')
 button_2 = Button(180,100,350,50,(250, 0 , 0),(0, 250, 0, 0),'Выберите уровень')
 button_3 = Button(130,250,180,50,(250, 0 , 0),(0, 250, 0, 0),'Уровень 1')
 button_4 = Button(250,350,180,50,(250, 0 , 0),(0, 250, 0, 0),'Уровень 3')
+enemy_one = Enemy(('rocket.png'),200,200,1,35,45)
+enemy_one.direction = 'left'
 
 game = True
 start = False
@@ -90,7 +114,7 @@ while game:
     for e in event.get():
         if e.type == QUIT:
             game = False
-
+    '''меню'''
     if start == False:
         button_1.reset()
         button_2.reset()
@@ -109,13 +133,19 @@ while game:
 
                 if button_4.collidepoint(x,y):
                     start = True
-
+    '''игра'''
     if start:
         window.blit(backgr,(0,0))
         spr1.reset()
         spr1.update()
         spr1.gravity()
-        
+        enemy_one.reset()
+        enemy_one.update()
+        if sprite.collide_rect(spr1,enemy_one):
+            start = False
+
+
+    clock.tick(FPS)
     display.update()
 
 
