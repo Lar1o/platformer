@@ -126,18 +126,18 @@ while game:
                 x,y = e.pos
 
                 if button_1.collidepoint(x,y):
+                    spr1.rect.y = 350
                     spr1.rect.x = 0
-                    spr1.rect.y = 200
                     start = True
 
                 if button_3.collidepoint(x,y):
-                    player_x = 0
-                    player_y = 200
+                    spr1.rect.y = 350
+                    spr1.rect.x = 0
                     start = True
 
                 if button_4.collidepoint(x,y):
-                    player_x = 0
-                    player_y = 200
+                    spr1.rect.y = 350
+                    spr1.rect.x = 0
                     start = True
     '''игра'''
     if start:
