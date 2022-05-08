@@ -51,7 +51,8 @@ class Player(GameSprite):
         if keys_pressed[K_SPACE] and self.rect.y > 0 and self.speedY == 0:
             self.speedY = 8
             self.rect.y -= self.speedY
-   
+
+
 class Button():
     def __init__(self,x,y,width,height,color,fill_color,text):
         self.x = x
@@ -93,20 +94,21 @@ class Enemy(GameSprite):
             self.rect.y -= 4
         if self.direction != 'up':
             self.rect.y += 4
-        if self.rect.y >= 435:
+        if self.rect.y >= 400:
             self.direction = 'up'
         if self.rect.y <= 5:
             self.direction = 'down'
-    
 
-spr1 = Player('right_side.png', 0, 100, 200, 70, 80)
+
+spr1 = Player('right_side.png', 0, 100, 5, 70, 80)
 button_1 = Button(380,250,180,50,(250, 0, 0),(0, 250, 0, 0),'Уровень 2')
 button_2 = Button(180,100,350,50,(250, 0 , 0),(0, 250, 0, 0),'Выберите уровень')
 button_3 = Button(130,250,180,50,(250, 0 , 0),(0, 250, 0, 0),'Уровень 1')
 button_4 = Button(250,350,180,50,(250, 0 , 0),(0, 250, 0, 0),'Уровень 3')
 enemy_one = Enemy(('rocket.png'),200,200,1,35,45)
 enemy_one.direction = 'left'
-
+enemy_two = Enemy(('rocket.png'),600,100,1,35,45)
+enemy_two.direction = 'up'
 game = True
 start = False
 
@@ -120,7 +122,6 @@ while game:
         button_2.reset()
         button_3.reset()
         button_4.reset()
-
 
         if e.type == MOUSEBUTTONDOWN:
                 x,y = e.pos
@@ -141,18 +142,12 @@ while game:
         spr1.gravity()
         enemy_one.reset()
         enemy_one.update()
+        enemy_two.reset()
+        enemy_two.update2()
         if sprite.collide_rect(spr1,enemy_one):
             start = False
-
+        if sprite.collide_rect(spr1,enemy_two):
+            start = False
 
     clock.tick(FPS)
     display.update()
-
-
-
-
-
-
-
-
-
