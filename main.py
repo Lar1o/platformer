@@ -99,7 +99,7 @@ class Enemy(GameSprite):
             self.direction = 'down'
     
 
-spr1 = Player('right_side.png', 0, 100, 200, 70, 80)
+spr1 = Player('right_side.png', 0, 100, 10, 70, 80)
 button_1 = Button(380,250,180,50,(250, 0, 0),(0, 250, 0, 0),'Уровень 2')
 button_2 = Button(180,100,350,50,(250, 0 , 0),(0, 250, 0, 0),'Выберите уровень')
 button_3 = Button(130,250,180,50,(250, 0 , 0),(0, 250, 0, 0),'Уровень 1')
@@ -126,12 +126,18 @@ while game:
                 x,y = e.pos
 
                 if button_1.collidepoint(x,y):
+                    spr1.rect.x = 0
+                    spr1.rect.y = 200
                     start = True
 
                 if button_3.collidepoint(x,y):
+                    player_x = 0
+                    player_y = 200
                     start = True
 
                 if button_4.collidepoint(x,y):
+                    player_x = 0
+                    player_y = 200
                     start = True
     '''игра'''
     if start:
