@@ -20,6 +20,13 @@ class GamePlatform(sprite.Sprite):
     def reset(self):
         window.blit(self.image, (self.rect.x, self.rect.y))
 
+    def stolk(self):
+        
+
+
+
+
+
 O_x = 700
 O_y = 500
 
@@ -39,7 +46,7 @@ with open('Setka.txt', 'r') as file:
     for i in range(len(data)):
         for j in range(len(data[i])):
             if data[i][j] == '1':
-                steni.append(GameSprite(('steni 2.jpg'), j, i, 35, 50))
+                steni.append(GamePlatform(('steni 2.jpg'), j, i, 35, 50))
 
 back_g = transform.scale(image.load("Fon.jpg"), (700, 500))
 

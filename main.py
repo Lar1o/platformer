@@ -28,6 +28,20 @@ class GameSprite(sprite.Sprite):
         window.blit(self.image, (self.rect.x, self.rect.y))
 
 
+class GamePlatform(sprite.Sprite):
+
+    def __init__(self, sprite1_image, sprite1_x,  sprite1_y, sprite1_vesota, sprite1_dlinna):
+        super().__init__()
+        self.image = transform.scale(image.load(sprite1_image), (sprite1_dlinna, sprite1_vesota))
+        self.vesota = sprite1_vesota
+        self.dlinna = sprite1_dlinna
+        self.rect = self.image.get_rect()
+        self.rect.x = sprite1_x*50
+        self.rect.y = sprite1_y*35
+
+    def reset1(self):
+        window.blit(self.image, (self.rect.x, self.rect.y))
+
 class Player(GameSprite):
     def gravity(self):
         if self.rect.y <= 360:
@@ -51,7 +65,14 @@ class Player(GameSprite):
         if keys_pressed[K_SPACE] and self.rect.y > 0 and self.speedY == 0:
             self.speedY = 8
             self.rect.y -= self.speedY
-   
+
+        
+
+
+
+
+
+
 class Button():
     def __init__(self,x,y,width,height,color,fill_color,text):
         self.x = x
@@ -107,6 +128,16 @@ button_4 = Button(250,350,180,50,(250, 0 , 0),(0, 250, 0, 0),'Уровень 3')
 enemy_one = Enemy(('rocket.png'),200,200,1,35,45)
 enemy_one.direction = 'left'
 
+steni = []
+
+with open('Setka.txt', 'r') as file:
+    data = file.readlines()
+    for i in range(len(data)):
+        for j in range(len(data[i])):
+            if data[i][j] == '1':
+                steni.append(GamePlatform(('steni 2.png'), j, i, 35, 50))
+
+
 game = True
 start = False
 
@@ -120,7 +151,8 @@ while game:
         button_2.reset()
         button_3.reset()
         button_4.reset()
-
+        for stena in steni:
+            stena.reset1()
 
         if e.type == MOUSEBUTTONDOWN:
                 x,y = e.pos
@@ -143,6 +175,8 @@ while game:
         enemy_one.update()
         if sprite.collide_rect(spr1,enemy_one):
             start = False
+        if sprite.collide_rect(spr1, steni) and self.rect.y >= i - 35:
+            self.rect.y == i-35
 
 
     clock.tick(FPS)
