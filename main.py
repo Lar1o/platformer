@@ -11,7 +11,7 @@ back = (0, 0, 0)
 window.fill(back)
 font1 = font.SysFont('Corbel',35)
 clock = time.Clock()
-FPS =60
+FPS = 60
 
 class GameSprite(sprite.Sprite):
     def __init__(self, player_image, player_x, player_y, player_speed, width, height):
@@ -23,7 +23,7 @@ class GameSprite(sprite.Sprite):
         self.rect.y = player_y
         self.turn = 'right'
         self.speedY = 0
-
+        self.speedX = 0
     def reset(self):
         window.blit(self.image, (self.rect.x, self.rect.y))
 
@@ -31,23 +31,32 @@ class GameSprite(sprite.Sprite):
 class Player(GameSprite):
     def gravity(self):
         if self.rect.y <= 360:
-            self.speedY -= 0.2
+            self.speedY -= 0.4
         else:
             self.speedY = 0
 
     def update(self):
         self.rect.y -= self.speedY
+        self.rect.x += self.speedX
         keys_pressed = key.get_pressed()
         if keys_pressed[K_d] and self.rect.x < 650:
-            self.rect.x += self.speed
+            if self.speedX < 5:
+                self.speedX += 1
+
             if self.turn == 'left':
                 self.image = transform.scale(image.load('right_side.png'), (70,80)) 
                 self.turn = 'right'
-        if keys_pressed[K_a] and self.rect.x > 5:
-            self.rect.x -= self.speed
+        elif keys_pressed[K_a] and self.rect.x > 5:
+            if self.speedX > -5:
+                self.speedX -= 1
             if self.turn == 'right':
                 self.image = transform.scale(image.load('left_side.png'), (70,80)) 
                 self.turn = 'left'
+        else:
+            if self.speedX > 0:
+                self.speedX = 0
+            elif self.speedX < 0:
+                self.speedX = 0
         if keys_pressed[K_SPACE] and self.rect.y > 0 and self.speedY == 0:
             self.speedY = 8
             self.rect.y -= self.speedY
@@ -98,8 +107,12 @@ class Enemy(GameSprite):
         if self.rect.y <= 5:
             self.direction = 'down'
     
+class Wall(GameSprite):
+    def __init__(self, player_image, player_x, player_y, width, height):
+        super().__init__(player_image, player_x*50, player_y*35, 0, width, height)
 
-spr1 = Player('right_side.png', 0, 100, 10, 70, 80)
+
+spr1 = Player('right_side.png', 0, 100, 5, 70, 80)
 button_1 = Button(380,250,180,50,(250, 0, 0),(0, 250, 0, 0),'Уровень 2')
 button_2 = Button(180,100,350,50,(250, 0 , 0),(0, 250, 0, 0),'Выберите уровень')
 button_3 = Button(130,250,180,50,(250, 0 , 0),(0, 250, 0, 0),'Уровень 1')
@@ -109,6 +122,17 @@ enemy_one.direction = 'left'
 
 game = True
 start = False
+
+walls = sprite.Group()
+
+def load_level(level):
+    with open(f'Setka{level}.txt', 'r') as file:
+        data = file.readlines()
+        for i in range(len(data)):
+            for j in range(len(data[i])):
+                if data[i][j] == '1':
+                    walls.add(Wall(('steni 2.jpg'), j, i, 50, 35))
+
 
 while game:
     for e in event.get():
@@ -121,21 +145,24 @@ while game:
         button_3.reset()
         button_4.reset()
 
-
         if e.type == MOUSEBUTTONDOWN:
                 x,y = e.pos
 
                 if button_1.collidepoint(x,y):
+                    load_level(2)
                     spr1.rect.y = 350
                     spr1.rect.x = 0
                     start = True
+                    
 
                 if button_3.collidepoint(x,y):
+                    load_level(1)
                     spr1.rect.y = 350
                     spr1.rect.x = 0
                     start = True
 
                 if button_4.collidepoint(x,y):
+                    load_level(3)
                     spr1.rect.y = 350
                     spr1.rect.x = 0
                     start = True
@@ -149,6 +176,15 @@ while game:
         enemy_one.update()
         if sprite.collide_rect(spr1,enemy_one):
             start = False
+        if sprite.spritecollide(spr1, walls, False):
+            wall = sprite.spritecollide(spr1, walls, False)
+            if spr1.speedX > 0:
+                spr1.rect.right = wall[0].rect.left
+            elif spr1.speedY > 0:
+                spr1.rect.bottom = wall[0].rect.top
+        
+
+        walls.draw(window)
 
 
     clock.tick(FPS)
