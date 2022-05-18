@@ -101,7 +101,7 @@ class Player(GameSprite):
                 
         if keys_pressed[K_SPACE]:
             self.jump()
-
+            
 
 class Button():
     def __init__(self,x,y,width,height,color,fill_color,text):
@@ -144,10 +144,11 @@ class Enemy(GameSprite):
             self.rect.y -= 4
         if self.direction != 'up':
             self.rect.y += 4
-        if self.rect.y >= 435:
+        if self.rect.y >= 400:
             self.direction = 'up'
         if self.rect.y <= 5:
             self.direction = 'down'
+
     
 class Wall(GameSprite):
     def __init__(self, player_image, player_x, player_y, width, height):
@@ -167,8 +168,11 @@ button_title = Button(180,100,350,50,(250, 0 , 0),(0, 250, 0, 0),'Выберит
 button_1 = Button(130,250,180,50,(250, 0 , 0),(0, 250, 0, 0),'Уровень 1')
 button_2 = Button(380,250,180,50,(250, 0, 0),(0, 250, 0, 0),'Уровень 2')
 button_3 = Button(250,350,180,50,(250, 0 , 0),(0, 250, 0, 0),'Уровень 3')
+
 enemy_one = Enemy(('assets/rocket.png'),200,200,1,35,45)
 enemy_one.direction = 'left'
+enemy_two = Enemy(('rocket.png'),600,100,1,35,45)
+enemy_two.direction = 'up'
 
 game = True
 start = False
@@ -217,6 +221,8 @@ while game:
         spr1.update()
         enemy_one.reset()
         enemy_one.update()
+        enemy_two.reset()
+        enemy_two.update2()
         if sprite.collide_rect(spr1,enemy_one):
             start = False
 
