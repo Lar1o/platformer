@@ -5,8 +5,8 @@ from time import time as timer
 window = display.set_mode((700,500))
 display.set_caption("Platformer")
 backgr = transform.scale(image.load('assets/background.jpg'), (700,500))
-spr_img_R = transform.scale(image.load('assets/right_side.png'), (70,80)) 
-spr_img_L = transform.scale(image.load('assets/left_side.png'), (70,80)) 
+spr_img_R = transform.scale(image.load('assets/right_side.png'), (50,65)) 
+spr_img_L = transform.scale(image.load('assets/left_side.png'), (50,65)) 
 font.init()
 back = (0, 0, 0)
 window.fill(back)
@@ -156,6 +156,7 @@ class Wall(GameSprite):
 
 
 def load_level(level):
+    walls.empty()
     with open(f'levels/Setka{level}.txt', 'r') as file:
         data = file.readlines()
         for i in range(len(data)):
@@ -163,7 +164,7 @@ def load_level(level):
                 if data[i][j] == '1':
                     walls.add(Wall(('assets/wall.jpg'), j, i, 50, 35))
 
-spr1 = Player('assets/right_side.png', 0, 100, 5, 70, 80)
+spr1 = Player('assets/right_side.png', 0, 100, 5, 50, 65)
 button_title = Button(180,100,350,50,(250, 0 , 0),(0, 250, 0, 0),'Выберите уровень')
 button_1 = Button(130,250,180,50,(250, 0 , 0),(0, 250, 0, 0),'Уровень 1')
 button_2 = Button(380,250,180,50,(250, 0, 0),(0, 250, 0, 0),'Уровень 2')
@@ -171,7 +172,7 @@ button_3 = Button(250,350,180,50,(250, 0 , 0),(0, 250, 0, 0),'Уровень 3')
 
 enemy_one = Enemy(('assets/rocket.png'),200,200,1,35,45)
 enemy_one.direction = 'left'
-enemy_two = Enemy(('rocket.png'),600,100,1,35,45)
+enemy_two = Enemy(('assets/rocket.png'),600,100,1,35,45)
 enemy_two.direction = 'up'
 
 game = True
@@ -223,7 +224,7 @@ while game:
         enemy_one.update()
         enemy_two.reset()
         enemy_two.update2()
-        if sprite.collide_rect(spr1,enemy_one):
+        if sprite.collide_rect(spr1,enemy_one) or sprite.collide_rect(spr1,enemy_two):
             start = False
 
         walls.draw(window)
